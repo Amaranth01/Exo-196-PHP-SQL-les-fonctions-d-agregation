@@ -25,6 +25,55 @@
 
     // TODO Votre code ici, commencez par require un des objet de connexion que nous avons fait ensemble.
 
+    try {
+        $server = 'localhost';
+        $db = 'exo_196';
+        $user = 'root';
+        $pswd = '';
+
+        $bdd = new PDO("mysql:host=$server;dbname=$db;charset=utf8", $user, $pswd);
+        $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $bdd->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+        $stm = $bdd ->prepare("SELECT MIN(age) as minimum FROM user");
+        if($stm->execute()) {
+            $min = $stm->fetch();
+            echo "<div> L'âge minimum est de : " . $min['minimum'] . " ans" . "</div> <br>";
+        }
+
+        $stm = $bdd ->prepare("SELECT MAX(age) as maximum FROM user");
+        if($stm->execute()) {
+            $max = $stm->fetch();
+            echo "<div> L'âge maximum est de : " . $max['maximum'] . " ans" . "</div> <br>";
+        }
+
+        $stm = $bdd ->prepare("SELECT count(*) as number FROM user");
+        if($stm->execute()) {
+            $num = $stm->fetch();
+            echo "<div> Le nombre d'utilisateur est de : " . $num['number'] . "</div> <br>";
+        }
+
+        $stm = $bdd ->prepare("SELECT count(*) as number FROM user WHERE numero >= 5");
+        if($stm->execute()) {
+            $rue = $stm->fetch();
+            echo "<div> Le nombre d'utilisateur dont le numéro de rue est plus grand que 5 est de : " . $rue['number'] .  "</div> <br>";
+        }
+
+        $stm = $bdd ->prepare("SELECT AVG(age) as moyenne_age FROM user");
+        if($stm->execute()) {
+            $moyenne = $stm->fetch();
+            echo "<div> La moyenne d'âge des utilisateurs est de " . $moyenne['moyenne_age'] . " ans" . "</div> <br>";
+        }
+
+        $stm = $bdd ->prepare("SELECT SUM(numero) as somme FROM user");
+        if($stm->execute()) {
+            $somme = $stm->fetch();
+            echo "<div> La somme des numéros de maison est de " . $somme['somme'] . "</div> <br>";
+        }
+    }
+    catch (PDOException $e) {
+        echo $e->getMessage();
+    }
 
     ?>
 </body>
